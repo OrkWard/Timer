@@ -1,5 +1,4 @@
 import { useState, useEffect } from 'react'
-import './App.css'
 
 function Timer() {
   const [time, setTime] = useState(0);
@@ -12,6 +11,7 @@ function Timer() {
     if (running) {
       setRunning(false);
       setTimeAccum(time);
+      localStorage.time = time;
     }
     else {
       setTimeStart(new Date().getTime());
@@ -22,12 +22,22 @@ function Timer() {
   function handleStop() {
     setTimeAccum(0);
     setTime(0);
+    localStorage.time = 0;
   }
+
+  useEffect(() => {
+    if (localStorage.time) {
+      setTimeAccum(parseInt(localStorage.time));
+      setTime(parseInt(localStorage.time));
+    }
+  }, []);
 
   useEffect(() => {
     const intervalID = setInterval(() => {
       if (running) {
-        setTime(timeAccum + new Date().getTime() - timeStart);
+        const newTime = timeAccum + new Date().getTime() - timeStart;
+        setTime(newTime);
+        localStorage.time = newTime;
       }
     }, 500)
 
@@ -37,12 +47,12 @@ function Timer() {
   }, [running, time, timeStart, timeAccum]);
 
   return (
-    <div>
-      <span className='timer'>
+    <div className='flex space-x-2'>
+      <span>
         {(time / 1000).toFixed(0)}
       </span>
-      <button onClick={handlePause}>{running ? 'pause' : 'start'}</button>
-      <button onClick={handleStop} disabled={running}>restart</button>
+      <button className='bg-blue-500 border-2 text-white' onClick={handlePause}>{running ? 'pause' : 'start'}</button>
+      <button className='bg-blue-500 border-2 text-white' onClick={handleStop} disabled={running}>restart</button>
     </div>
   )
 }
@@ -50,10 +60,8 @@ function Timer() {
 function App() {
   return (
     <>
-      <div className='container'>
-        <div className='logo timer-container' >
-          <Timer />
-        </div>
+      <div className='flex justify-items-center'>
+        <Timer />
       </div>
       {/* <Timer startTime={10} /> */}
     </>
