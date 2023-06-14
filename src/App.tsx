@@ -1,60 +1,58 @@
 import { useState, useEffect } from 'react'
 import './App.css'
 
-function Timer({ restarted, running }: { restarted: boolean, running: boolean }) {
+function Timer() {
   const [time, setTime] = useState(0);
-  const [timeLast, setTimeLast] = useState(new Date().getTime());
+  const [timeStart, setTimeStart] = useState(new Date().getTime());
+  const [timeAccum, setTimeAccum] = useState(0);
+  const [running, setRunning] = useState(false);
+
+
+  function handlePause() {
+    if (running) {
+      setRunning(false);
+      setTimeAccum(time);
+    }
+    else {
+      setTimeStart(new Date().getTime());
+      setRunning(true);
+    }
+  }
+
+  function handleStop() {
+    setTimeAccum(0);
+    setTime(0);
+  }
 
   useEffect(() => {
-    const timeNow = new Date().getTime();
     const intervalID = setInterval(() => {
-      if (restarted) {
-        setTime(0);
+      if (running) {
+        setTime(timeAccum + new Date().getTime() - timeStart);
       }
-      else if (running) {
-        setTime(timeNow - timeLast + time);
-      }
-      setTimeLast(timeNow);
     }, 500)
 
     return () => {
       clearInterval(intervalID);
     }
-  }, [running, time, timeLast, restarted]);
+  }, [running, time, timeStart, timeAccum]);
 
   return (
-    <span className='timer'>
-      {restarted ? 0 :(time / 1000).toFixed(0)}
-    </span>
+    <div>
+      <span className='timer'>
+        {(time / 1000).toFixed(0)}
+      </span>
+      <button onClick={handlePause}>{running ? 'pause' : 'start'}</button>
+      <button onClick={handleStop} disabled={running}>restart</button>
+    </div>
   )
 }
 
 function App() {
-  const [firstRestart, setFirstRestart] = useState(false);
-  const [firstRun, setFirstRun] = useState(false);
-
-  function handlePause() {
-    if (firstRestart) {
-      setFirstRestart(false);
-    }
-    setFirstRun(!firstRun);
-  }
-
-  function handleStop() {
-    setFirstRestart(true);
-  }
-
   return (
     <>
       <div className='container'>
         <div className='logo timer-container' >
-          <Timer restarted={firstRestart} running={firstRun} />
-          <button className='start' onClick={handlePause} >
-            {firstRun ? 'pause' : 'run'}
-          </button>
-          <button className='restart' onClick={handleStop} disabled={firstRun}>
-            restart
-          </button>
+          <Timer />
         </div>
       </div>
       {/* <Timer startTime={10} /> */}
