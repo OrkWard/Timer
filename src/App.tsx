@@ -62,6 +62,7 @@ function App() {
     <>
       <div className='flex justify-items-center'>
         <Timer />
+        <Timer />
       </div>
       {/* <Timer startTime={10} /> */}
     </>
