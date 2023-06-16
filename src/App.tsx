@@ -7,9 +7,9 @@ function Timer({ id }: { id: number }) {
   const [running, setRunning] = useState(false);
 
   function setLocalStorge(timeSet: number) {
-      const timeRecord = localStorage.time ? JSON.parse(localStorage.time) : [];
-      timeRecord[id] = timeSet;
-      localStorage.time = JSON.stringify(timeRecord);
+    const timeRecord = localStorage.time ? JSON.parse(localStorage.time) : [];
+    timeRecord[id] = timeSet;
+    localStorage.time = JSON.stringify(timeRecord);
   }
 
   function handlePause() {
@@ -53,12 +53,12 @@ function Timer({ id }: { id: number }) {
   }, [running, time, timeStart, timeAccum]);
 
   return (
-    <div className='flex space-x-2'>
-      <span>
-        {(time / 1000).toFixed(0)}
+    <div className='flex space-x-2 border-2 border-blue-500 p-3 my-2 rounded-md'>
+      <span className='w-20 text-center'>
+        { Math.trunc(time / 60000).toString().padStart(2, '0') + ':' + (Math.trunc(time / 1000) % 60).toString().padStart(2, '0')}
       </span>
-      <button className='bg-blue-500 border-2 text-white' onClick={handlePause}>{running ? 'pause' : 'start'}</button>
-      <button className='bg-blue-500 border-2 text-white' onClick={handleStop} disabled={running}>restart</button>
+      <button className='bg-blue-500 border-2 text-white w-20 rounded-md' onClick={handlePause}>{running ? 'pause' : 'start'}</button>
+      <button className='bg-blue-500 border-2 text-white w-20 rounded-md' onClick={handleStop} disabled={running}>restart</button>
     </div>
   )
 }
@@ -66,7 +66,7 @@ function Timer({ id }: { id: number }) {
 function App() {
   return (
     <>
-      <div className='flex justify-items-center flex-col'>
+      <div className='flex justify-items-center flex-col bg-slate-100 p-5 rounded-md'>
         <Timer id={0} />
         <Timer id={1} />
       </div>
