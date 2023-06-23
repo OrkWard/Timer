@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 
-function Timer({ id }: { id: number }) {
+function Timer({ name, id }: { name: string, id: number }) {
   const [time, setTime] = useState(0);
   const [timeStart, setTimeStart] = useState(new Date().getTime());
   const [timeAccum, setTimeAccum] = useState(0);
@@ -36,7 +36,7 @@ function Timer({ id }: { id: number }) {
       setTimeAccum(timeRecord[id]);
       setTime(timeRecord[id]);
     }
-  }, []);
+  }, [id]);
 
   useEffect(() => {
     const intervalID = setInterval(() => {
@@ -54,11 +54,12 @@ function Timer({ id }: { id: number }) {
 
   return (
     <div className='flex space-x-2 border-2 border-blue-500 p-3 my-2 rounded-md'>
+      <span className='w-20 text-center border-2 border-blue-500 rounded-md' >{name}</span>
       <span className='w-20 text-center'>
-        { Math.trunc(time / 60000).toString().padStart(2, '0') + ':' + (Math.trunc(time / 1000) % 60).toString().padStart(2, '0')}
+        {Math.trunc(time / 60000).toString().padStart(2, '0') + ':' + (Math.trunc(time / 1000) % 60).toString().padStart(2, '0')}
       </span>
       <button className='bg-blue-500 border-2 text-white w-20 rounded-md' onClick={handlePause}>{running ? 'pause' : 'start'}</button>
-      <button className='bg-blue-500 border-2 text-white w-20 rounded-md' onClick={handleStop} disabled={running}>restart</button>
+      <button className='bg-blue-500 border-2 text-white w-20 rounded-md disabled:text-gray-400' onClick={handleStop} disabled={running}>restart</button>
     </div>
   )
 }
@@ -67,8 +68,9 @@ function App() {
   return (
     <>
       <div className='flex justify-items-center flex-col bg-slate-100 p-5 rounded-md'>
-        <Timer id={0} />
-        <Timer id={1} />
+        <Timer id={0} name='work' />
+        <Timer id={1} name='learn' />
+        <Timer id={2} name='relax' />
       </div>
       {/* <Timer startTime={10} /> */}
     </>
