@@ -53,13 +53,15 @@ function Timer({ name, id }: { name: string, id: number }) {
   }, [running, time, timeStart, timeAccum]);
 
   return (
-    <div className='flex space-x-2 border-2 border-blue-500 p-3 my-2 rounded-md'>
+    <div className='flex space-x-1 border-2 border-blue-500 p-3 my-2 rounded-md items-center'>
       <span className='w-20 text-center border-2 border-blue-500 rounded-md' >{name}</span>
       <span className='w-20 text-center'>
         {Math.trunc(time / 60000).toString().padStart(2, '0') + ':' + (Math.trunc(time / 1000) % 60).toString().padStart(2, '0')}
       </span>
-      <button className='bg-blue-500 border-2 text-white w-20 rounded-md' onClick={handlePause}>{running ? 'pause' : 'start'}</button>
-      <button className='bg-blue-500 border-2 text-white w-20 rounded-md disabled:text-gray-400' onClick={handleStop} disabled={running}>restart</button>
+      <span className='flex flex-col'>
+        <button className='bg-blue-500 border-2 text-white w-20 rounded-md' onClick={handlePause}>{running ? 'pause' : 'start'}</button>
+        <button className='bg-blue-500 border-2 text-white w-20 rounded-md disabled:text-gray-400' onClick={handleStop} disabled={running}>restart</button>
+      </span>
     </div>
   )
 }
